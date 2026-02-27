@@ -9,16 +9,13 @@ const Contact = () => {
         e.preventDefault();
         setStatus('Sending...');
 
-        const res = await fetch("https://api.web3forms.com/submit", {
+        const res = await fetch("http://localhost:5000/api/contact", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 Accept: "application/json",
             },
             body: JSON.stringify({
-                access_key: "YOUR_ACCESS_KEY_HERE", // NOTE: Replace this
-                subject: `New Lead from ${formData.name}`,
-                from_name: "LeadMotionX Website Form",
                 ...formData
             }),
         }).then((res) => res.json());
