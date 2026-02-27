@@ -1,4 +1,4 @@
-CompanyName,ContactName,Email
-Texas Premium Roofing,John,test1@example.com
-Swift Moves LLC,Sarah,test2@example.com
-Cool Air HVAC,Mike,test3@example.com
+CompanyName,ContactName,Email,Status
+Texas Premium Roofing,John,test1@example.com,Pending
+Swift Moves LLC,Sarah,test2@example.com,Pending
+Cool Air HVAC,Mike,test3@example.com,Pending
