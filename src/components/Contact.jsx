@@ -3,13 +3,34 @@ import { Mail, Phone, MapPin, Send } from 'lucide-react';
 
 const Contact = () => {
     const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
-    const [submitted, setSubmitted] = useState(false);
+    const [status, setStatus] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setSubmitted(true);
-        setTimeout(() => setSubmitted(false), 3000);
-        setFormData({ name: '', email: '', phone: '', message: '' });
+        setStatus('Sending...');
+
+        const res = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: JSON.stringify({
+                access_key: "YOUR_ACCESS_KEY_HERE", // NOTE: Replace this
+                subject: `New Lead from ${formData.name}`,
+                from_name: "LeadMotionX Website Form",
+                ...formData
+            }),
+        }).then((res) => res.json());
+
+        if (res.success) {
+            setStatus('Message Sent Successfully!');
+            setFormData({ name: '', email: '', phone: '', message: '' });
+            setTimeout(() => setStatus(''), 5000);
+        } else {
+            setStatus('Something went wrong.');
+            setTimeout(() => setStatus(''), 5000);
+        }
     };
 
     const inputStyles = {
@@ -102,8 +123,8 @@ const Contact = () => {
                                 onChange={e => setFormData({ ...formData, phone: e.target.value })}
                             />
 
-                            <button type="submit" className="btn btn-primary" style={{ width: '100%', display: 'flex', gap: '8px', justifyContent: 'center' }}>
-                                {submitted ? 'Message Sent!' : <>Get Started <Send size={18} /></>}
+                            <button type="submit" disabled={status === 'Sending...'} className="btn btn-primary" style={{ width: '100%', display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                                {status ? status : <>Get Started <Send size={18} /></>}
                             </button>
                         </form>
                     </div>
