@@ -43,9 +43,10 @@ const Navbar = () => {
         {/* Desktop Links */}
         <div style={{ display: 'none' }} className="desktop-menu">
           <ul style={{ display: 'flex', listStyle: 'none', gap: '2rem', alignItems: 'center' }}>
+            <li><a href="#process" style={{ fontWeight: 500 }}>Process</a></li>
             <li><a href="#services" style={{ fontWeight: 500 }}>Services</a></li>
             <li><a href="#testimonials" style={{ fontWeight: 500 }}>Results</a></li>
-            <li><a href="#about" style={{ fontWeight: 500 }}>About Us</a></li>
+            <li><a href="#pricing" style={{ fontWeight: 500 }}>Pricing</a></li>
           </ul>
         </div>
 
@@ -75,9 +76,10 @@ const Navbar = () => {
           flexDirection: 'column',
           gap: '1.5rem'
         }}>
+          <a href="#process" onClick={() => setIsMobileMenuOpen(false)}>Process</a>
           <a href="#services" onClick={() => setIsMobileMenuOpen(false)}>Services</a>
           <a href="#testimonials" onClick={() => setIsMobileMenuOpen(false)}>Results</a>
-          <a href="#about" onClick={() => setIsMobileMenuOpen(false)}>About Us</a>
+          <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)}>Pricing</a>
           <a href="#contact" className="btn btn-primary" style={{ textAlign: 'center' }} onClick={() => setIsMobileMenuOpen(false)}>Get Free Strategy</a>
         </div>
       )}
