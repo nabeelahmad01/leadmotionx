@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
+const fs = require('fs');
+const csv = require('csv-parser');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -59,6 +61,117 @@ app.post('/api/contact', async (req, res) => {
         console.error("Error sending email:", error);
         res.status(500).json({ success: false, message: 'Failed to send lead.' });
     }
+});
+
+// Helper for CSV writes
+const writeCSV = (leads) => {
+    const header = "CompanyName,ContactName,Email,Status\n";
+    const rows = leads.map(l => `"${l.CompanyName || ''}","${l.ContactName || ''}","${l.Email || ''}","${l.Status || 'Pending'}"`).join("\n");
+    fs.writeFileSync('leads.csv', header + rows);
+};
+
+// API: Get Leads
+app.get('/api/leads', (req, res) => {
+    const leads = [];
+    if (!fs.existsSync('leads.csv')) {
+        return res.json([]);
+    }
+    fs.createReadStream('leads.csv')
+        .pipe(csv())
+        .on('data', (row) => leads.push(row))
+        .on('end', () => res.json(leads))
+        .on('error', (err) => res.status(500).json({ error: err.message }));
+});
+
+// API: Add Lead
+app.post('/api/leads', (req, res) => {
+    const { CompanyName, ContactName, Email } = req.body;
+    if (!CompanyName || !ContactName || !Email) {
+        return res.status(400).json({ error: 'All fields required' });
+    }
+    
+    // Read current, append, save
+    const leads = [];
+    if (fs.existsSync('leads.csv')) {
+        fs.createReadStream('leads.csv')
+            .pipe(csv())
+            .on('data', (row) => leads.push(row))
+            .on('end', () => {
+                leads.push({ CompanyName, ContactName, Email, Status: 'Pending' });
+                writeCSV(leads);
+                res.json({ success: true });
+            });
+    } else {
+        leads.push({ CompanyName, ContactName, Email, Status: 'Pending' });
+        writeCSV(leads);
+        res.json({ success: true });
+    }
+});
+
+// API: Delete Lead
+app.delete('/api/leads/:email', (req, res) => {
+    const emailToDelete = req.params.email;
+    const leads = [];
+    if (!fs.existsSync('leads.csv')) {
+        return res.status(404).json({ error: 'No leads found' });
+    }
+    
+    fs.createReadStream('leads.csv')
+        .pipe(csv())
+        .on('data', (row) => leads.push(row))
+        .on('end', () => {
+            const filteredLeads = leads.filter(l => l.Email !== emailToDelete);
+            writeCSV(filteredLeads);
+            res.json({ success: true });
+        });
+});
+
+// API: Send Campaign
+app.post('/api/campaign/send', async (req, res) => {
+    const { subject, body } = req.body;
+    if (!subject || !body) {
+        return res.status(400).json({ error: 'Subject and Body required' });
+    }
+
+    const leads = [];
+    if (!fs.existsSync('leads.csv')) {
+        return res.status(404).json({ error: 'No leads found' });
+    }
+
+    fs.createReadStream('leads.csv')
+        .pipe(csv())
+        .on('data', (row) => leads.push(row))
+        .on('end', async () => {
+            let sentCount = 0;
+            const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+            for (let i = 0; i < leads.length; i++) {
+                const lead = leads[i];
+                if (lead.Status && lead.Status.trim().toLowerCase() === 'sent') continue;
+
+                // Replace Variables
+                let personalizedSubject = subject.replace(/{CompanyName}/g, lead.CompanyName).replace(/{ContactName}/g, lead.ContactName);
+                let personalizedBody = body.replace(/{CompanyName}/g, lead.CompanyName).replace(/{ContactName}/g, lead.ContactName);
+
+                const mailOptions = {
+                    from: `"LeadMotionX Campaign" <${process.env.EMAIL_USER}>`,
+                    to: lead.Email,
+                    subject: personalizedSubject,
+                    html: personalizedBody
+                };
+
+                try {
+                    await transporter.sendMail(mailOptions);
+                    lead.Status = 'Sent';
+                    writeCSV(leads); // save immediately
+                    sentCount++;
+                    if (i < leads.length - 1) await delay(3000); // 3 second delay
+                } catch (err) {
+                    console.error("Failed to send to", lead.Email, err);
+                }
+            }
+            res.json({ success: true, sentCount });
+        });
 });
 
 // Start Server
