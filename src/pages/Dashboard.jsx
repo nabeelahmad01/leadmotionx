@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Users, Mail, Settings, RefreshCw, Trash2, Send } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Users, Mail, Settings, RefreshCw, Trash2, Send, Upload } from 'lucide-react';
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('leads');
@@ -8,6 +8,7 @@ const Dashboard = () => {
 
     const [newLead, setNewLead] = useState({ CompanyName: '', ContactName: '', Email: '' });
     const [campaign, setCampaign] = useState({ subject: 'Quick question about {CompanyName}', body: 'Hi {ContactName},\\n\\nI noticed Your website...' });
+    const fileInputRef = useRef(null);
 
     const fetchLeads = async () => {
         setLoading(true);
@@ -47,6 +48,38 @@ const Dashboard = () => {
         } catch (error) {
             console.error(error);
         }
+    };
+
+    const handleFileUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            setLoading(true);
+            const res = await fetch('http://localhost:5000/api/leads/import', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+            
+            if (data.success) {
+                alert(`Import Successful!\\n\\nImported ${data.importedCount} new leads.\\nSkipped ${data.duplicatesSkipped} duplicates.`);
+                fetchLeads();
+            } else {
+                alert('Error importing file: ' + data.error);
+                setLoading(false);
+            }
+        } catch (error) {
+            console.error("Upload error:", error);
+            alert('Failed to import file.');
+            setLoading(false);
+        }
+        
+        // Reset file input
+        if (fileInputRef.current) fileInputRef.current.value = '';
     };
 
     const handleSendCampaign = async () => {
@@ -98,9 +131,22 @@ const Dashboard = () => {
                     <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                             <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>Lead Manager</h1>
-                            <button onClick={fetchLeads} style={{ background: '#334155', color: 'white', border: 'none', padding: '10px 15px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <RefreshCw size={16} /> Refresh
-                            </button>
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                                {/* Hidden File Input */}
+                                <input 
+                                    type="file" 
+                                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" 
+                                    ref={fileInputRef} 
+                                    style={{ display: 'none' }} 
+                                    onChange={handleFileUpload}
+                                />
+                                <button onClick={() => fileInputRef.current?.click()} style={{ background: '#10b981', color: 'white', border: 'none', padding: '10px 15px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>
+                                    <Upload size={16} /> Import Leads (CSV/Excel)
+                                </button>
+                                <button onClick={fetchLeads} style={{ background: '#334155', color: 'white', border: 'none', padding: '10px 15px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <RefreshCw size={16} /> Refresh
+                                </button>
+                            </div>
                         </div>
 
                         {/* Add Lead Form */}

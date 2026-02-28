@@ -4,6 +4,11 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const csv = require('csv-parser');
+const multer = require('multer');
+const xlsx = require('xlsx');
+
+// Setup Multer for memory storage
+const upload = multer({ storage: multer.memoryStorage() });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -172,6 +177,70 @@ app.post('/api/campaign/send', async (req, res) => {
             }
             res.json({ success: true, sentCount });
         });
+});
+
+// API: Import Leads from CSV/Excel
+app.post('/api/leads/import', upload.single('file'), (req, res) => {
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
+    try {
+        let importedData = [];
+
+        // Parse file buffer depending on exact format using XLSX (handles both CSV and Excel)
+        const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
+        const sheetName = workbook.SheetNames[0];
+        const rawData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
+
+        // Normalization logic: Match user's chaotic spreadsheet columns to our clean system
+        rawData.forEach(row => {
+            // Find "Company Name" or "Company" or "CompanyName"
+            const compKey = Object.keys(row).find(k => k.toLowerCase().replace(/\\s/g, '') === 'companyname' || k.toLowerCase().replace(/\\s/g, '') === 'company');
+            const companyName = compKey ? row[compKey] : 'Unknown Company';
+
+            // Find "Email" or "Company Email"
+            const emailKey = Object.keys(row).find(k => k.toLowerCase().includes('email'));
+            const email = emailKey ? row[emailKey] : null;
+
+            // Find "Contact Name" or just fallback
+            const contactKey = Object.keys(row).find(k => k.toLowerCase().replace(/\\s/g, '') === 'contactname' || k.toLowerCase().replace(/\\s/g, '') === 'contact' || k.toLowerCase() === 'name');
+            const contactName = contactKey ? row[contactKey] : 'Business Owner';
+
+            if (email && email.includes('@')) {
+                importedData.push({
+                    CompanyName: companyName,
+                    ContactName: contactName,
+                    Email: email,
+                    Status: 'Pending'
+                });
+            }
+        });
+
+        // Current Leads
+        const existingLeads = [];
+        if (fs.existsSync('leads.csv')) {
+            fs.createReadStream('leads.csv')
+                .pipe(csv())
+                .on('data', row => existingLeads.push(row))
+                .on('end', () => {
+                    // Filter duplicates
+                    const existingEmails = new Set(existingLeads.map(l => l.Email.toLowerCase()));
+                    const newLeads = importedData.filter(l => !existingEmails.has(l.Email.toLowerCase()));
+                    
+                    if (newLeads.length > 0) {
+                        const mergedLeads = [...existingLeads, ...newLeads];
+                        writeCSV(mergedLeads);
+                    }
+                    res.json({ success: true, importedCount: newLeads.length, duplicatesSkipped: importedData.length - newLeads.length });
+                });
+        } else {
+            writeCSV(importedData);
+            res.json({ success: true, importedCount: importedData.length, duplicatesSkipped: 0 });
+        }
+
+    } catch (error) {
+        console.error('Import error:', error);
+        res.status(500).json({ error: 'Failed to process file. Make sure it is a valid CSV or Excel.' });
+    }
 });
 
 // Start Server
