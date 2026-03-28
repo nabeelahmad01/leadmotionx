@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, BarChart2 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const Hero = () => {
     return (
@@ -8,31 +8,30 @@ const Hero = () => {
             display: 'flex',
             alignItems: 'center',
             position: 'relative',
-            paddingTop: '120px'
+            paddingTop: '120px',
+            background: 'linear-gradient(135deg, #f0f4f8 0%, #e0e8f5 50%, #f0f4f8 100%)',
+            overflow: 'hidden'
         }}>
-            {/* Background Graphic */}
+            {/* Decorative background elements */}
             <div style={{
                 position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                zIndex: -1,
-                backgroundImage: 'url("/images/hero_bg.png")',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                opacity: 0.4
+                top: '-100px',
+                right: '-100px',
+                width: '500px',
+                height: '500px',
+                background: 'radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%)',
+                borderRadius: '50%',
+                zIndex: 0
             }}></div>
-
-            {/* Gradient Overlay for dark fade at bottom */}
             <div style={{
                 position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                zIndex: -1,
-                background: 'linear-gradient(to bottom, rgba(5,5,5,0.2) 0%, rgba(5,5,5,1) 100%)'
+                bottom: '-150px',
+                left: '-100px',
+                width: '400px',
+                height: '400px',
+                background: 'radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%)',
+                borderRadius: '50%',
+                zIndex: 0
             }}></div>
 
             <div className="container" style={{ position: 'relative', zIndex: 1 }}>
@@ -42,17 +41,17 @@ const Hero = () => {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '8px',
-                        background: 'var(--glass-bg)',
+                        background: 'rgba(59, 130, 246, 0.08)',
                         padding: '8px 16px',
                         borderRadius: '50px',
-                        border: '1px solid var(--primary-glow)',
+                        border: '1px solid rgba(59, 130, 246, 0.15)',
                         marginBottom: '2rem'
                     }}>
-                        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary)', boxShadow: '0 0 10px var(--primary)' }}></span>
-                        <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Top Rated US B2B Growth Agency</span>
+                        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary)', boxShadow: '0 0 10px var(--primary-glow)' }}></span>
+                        <span style={{ fontSize: '0.9rem', color: 'var(--primary)', fontWeight: 600 }}>Top Rated US B2B Growth Agency</span>
                     </div>
 
-                    <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
+                    <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', marginBottom: '1.5rem', letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
                         Dominate Your Local Market with <br />
                         <span className="text-gradient">High-Converting Machinery</span>
                     </h1>
@@ -70,18 +69,18 @@ const Hero = () => {
                         </a>
                     </div>
 
-                    <div style={{ marginTop: '4rem', display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap', opacity: 0.7 }}>
+                    <div style={{ marginTop: '4rem', display: 'flex', justifyContent: 'center', gap: '3rem', flexWrap: 'wrap' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <h3 style={{ fontSize: '2rem', color: 'var(--text-main)' }}>250+</h3>
-                            <span style={{ fontSize: '0.9rem' }}>Websites Built</span>
+                            <h3 style={{ fontSize: '2.5rem', color: 'var(--primary)', fontWeight: 800 }}>250+</h3>
+                            <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Websites Built</span>
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <h3 style={{ fontSize: '2rem', color: 'var(--text-main)' }}>10k+</h3>
-                            <span style={{ fontSize: '0.9rem' }}>Leads Generated</span>
+                            <h3 style={{ fontSize: '2.5rem', color: 'var(--primary)', fontWeight: 800 }}>10k+</h3>
+                            <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Leads Generated</span>
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <h3 style={{ fontSize: '2rem', color: 'var(--text-main)' }}>$5M+</h3>
-                            <span style={{ fontSize: '0.9rem' }}>Client Revenue</span>
+                            <h3 style={{ fontSize: '2.5rem', color: 'var(--primary)', fontWeight: 800 }}>$5M+</h3>
+                            <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Client Revenue</span>
                         </div>
                     </div>
 

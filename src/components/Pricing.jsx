@@ -32,14 +32,14 @@ const Pricing = () => {
                     </div>
 
                     {/* Plan 2 */}
-                    <div className="glass-panel" style={{ flex: '1', minWidth: '300px', maxWidth: '400px', borderTop: '4px solid var(--primary)', transform: 'scale(1.05)', zIndex: 10 }}>
+                    <div className="glass-panel" style={{ flex: '1', minWidth: '300px', maxWidth: '400px', borderTop: '4px solid var(--primary)', transform: 'scale(1.05)', zIndex: 10, background: 'linear-gradient(135deg, rgba(59,130,246,0.04), rgba(139,92,246,0.04))' }}>
                         <div style={{
                             position: 'absolute',
                             top: '-15px',
                             right: '20px',
-                            background: 'var(--primary)',
+                            background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
                             color: 'white',
-                            padding: '4px 12px',
+                            padding: '4px 16px',
                             borderRadius: '20px',
                             fontSize: '0.8rem',
                             fontWeight: 'bold'

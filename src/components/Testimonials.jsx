@@ -39,34 +39,21 @@ const Testimonials = () => {
                         <div key={index} className="glass-panel" style={{ position: 'relative', overflow: 'hidden' }}>
                             <div style={{ display: 'flex', gap: '4px', marginBottom: '1.5rem' }}>
                                 {[...Array(t.rating)].map((_, i) => (
-                                    <Star key={i} size={18} fill="var(--primary)" color="var(--primary)" />
+                                    <Star key={i} size={18} fill="#f59e0b" color="#f59e0b" />
                                 ))}
                             </div>
 
-                            <p style={{ fontSize: '1.1rem', fontStyle: 'italic', marginBottom: '2rem', lineHeight: 1.6 }}>
+                            <p style={{ fontSize: '1.05rem', fontStyle: 'italic', marginBottom: '2rem', lineHeight: 1.7, color: 'var(--text-muted)' }}>
                                 "{t.quote}"
                             </p>
 
                             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                                <img src={t.image} alt={t.name} style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary-glow)' }} />
+                                <img src={t.image} alt={t.name} style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--bg-light)' }} />
                                 <div>
-                                    <h4 style={{ fontSize: '1.1rem', marginBottom: '4px' }}>{t.name}</h4>
-                                    <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{t.role}</p>
+                                    <h4 style={{ fontSize: '1.05rem', marginBottom: '2px' }}>{t.name}</h4>
+                                    <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>{t.role}</p>
                                 </div>
                             </div>
-
-                            {/* Decorative Accent */}
-                            <div style={{
-                                position: 'absolute',
-                                top: '-20px',
-                                right: '-20px',
-                                width: '100px',
-                                height: '100px',
-                                background: 'var(--primary-glow)',
-                                filter: 'blur(50px)',
-                                borderRadius: '50%',
-                                zIndex: -1
-                            }}></div>
                         </div>
                     ))}
                 </div>

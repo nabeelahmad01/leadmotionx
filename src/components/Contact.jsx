@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, Send } from 'lucide-react';
 
 const Contact = () => {
     const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
@@ -32,20 +32,20 @@ const Contact = () => {
 
     const inputStyles = {
         width: '100%',
-        padding: '16px',
-        background: 'rgba(255,255,255,0.03)',
+        padding: '14px 16px',
+        background: 'var(--bg-light)',
         border: '1px solid var(--glass-border)',
         borderRadius: '12px',
         color: 'var(--text-main)',
         fontFamily: 'var(--font-body)',
         fontSize: '1rem',
-        marginBottom: '1.5rem',
+        marginBottom: '1.25rem',
         outline: 'none',
         transition: 'border-color 0.3s'
     };
 
     return (
-        <section id="contact" style={{ background: 'var(--bg-light)', position: 'relative' }}>
+        <section id="contact" style={{ position: 'relative' }}>
             <div className="container">
                 <div style={{
                     display: 'grid',
@@ -59,27 +59,27 @@ const Contact = () => {
                         <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>
                             Ready to <span className="text-gradient">Scale?</span>
                         </h2>
-                        <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '3rem' }}>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '3rem', lineHeight: 1.7 }}>
                             We're offering a FREE Custom Website Mockup to the first 5 contractors who reach out this month. Let us show you what your brand COULD look like.
                         </p>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <div style={{ background: 'var(--glass-bg)', padding: '12px', borderRadius: '50%' }}>
-                                    <Phone color="var(--primary)" size={24} />
+                                <div style={{ background: 'rgba(59,130,246,0.08)', padding: '12px', borderRadius: '12px' }}>
+                                    <Phone color="var(--primary)" size={22} />
                                 </div>
                                 <div>
-                                    <h4 style={{ fontSize: '1.1rem', marginBottom: '4px' }}>Phone</h4>
+                                    <h4 style={{ fontSize: '1rem', marginBottom: '2px' }}>Phone</h4>
                                     <a href="tel:2097642829" style={{ color: 'var(--text-muted)' }}>(209) 764-2829</a>
                                 </div>
                             </div>
 
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <div style={{ background: 'var(--glass-bg)', padding: '12px', borderRadius: '50%' }}>
-                                    <Mail color="var(--primary)" size={24} />
+                                <div style={{ background: 'rgba(59,130,246,0.08)', padding: '12px', borderRadius: '12px' }}>
+                                    <Mail color="var(--primary)" size={22} />
                                 </div>
                                 <div>
-                                    <h4 style={{ fontSize: '1.1rem', marginBottom: '4px' }}>Email</h4>
+                                    <h4 style={{ fontSize: '1rem', marginBottom: '2px' }}>Email</h4>
                                     <a href="mailto:contact@leadmotionx.com" style={{ color: 'var(--text-muted)' }}>contact@leadmotionx.com</a>
                                 </div>
                             </div>
@@ -89,10 +89,7 @@ const Contact = () => {
 
                     {/* Right Side: Form */}
                     <div className="glass-panel" style={{ position: 'relative' }}>
-                        {/* Glow effect */}
-                        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '200px', height: '200px', background: 'var(--secondary-glow)', filter: 'blur(80px)', zIndex: -1 }}></div>
-
-                        <h3 style={{ fontSize: '1.8rem', marginBottom: '2rem' }}>Claim Your Free Mockup</h3>
+                        <h3 style={{ fontSize: '1.6rem', marginBottom: '2rem' }}>Claim Your Free Mockup</h3>
 
                         <form onSubmit={handleSubmit}>
                             <input

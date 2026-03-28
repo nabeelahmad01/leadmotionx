@@ -4,22 +4,22 @@ import { Target, Lightbulb, Rocket, TrendingUp } from 'lucide-react';
 const Process = () => {
     const steps = [
         {
-            icon: <Target size={32} color="white" />,
+            icon: <Target size={28} color="white" />,
             title: '1. Discovery & Strategy',
             desc: 'We analyze your local market, competitors, and current online presence to find the lowest-hanging fruit for immediate growth.'
         },
         {
-            icon: <Lightbulb size={32} color="white" />,
+            icon: <Lightbulb size={28} color="white" />,
             title: '2. Free Custom Mockup',
             desc: 'We build a high-converting, custom-tailored homepage mockup completely FREE of charge. No upfront fees.'
         },
         {
-            icon: <Rocket size={32} color="white" />,
+            icon: <Rocket size={28} color="white" />,
             title: '3. Launch & Optimize',
             desc: 'If you love the design, we launch the site. We implement our local SEO framework to get you ranking on Google Maps.'
         },
         {
-            icon: <TrendingUp size={32} color="white" />,
+            icon: <TrendingUp size={28} color="white" />,
             title: '4. Lead Generation Asset',
             desc: 'You pay a small monthly maintenance fee, and we ensure the site continues to generate high-ticket exclusive leads.'
         }
@@ -32,9 +32,9 @@ const Process = () => {
                 <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
                     <div style={{
                         display: 'inline-block',
-                        padding: '4px 12px',
-                        background: 'var(--glass-bg)',
-                        border: '1px solid var(--secondary)',
+                        padding: '6px 16px',
+                        background: 'rgba(139, 92, 246, 0.08)',
+                        border: '1px solid rgba(139, 92, 246, 0.2)',
                         borderRadius: '50px',
                         color: 'var(--secondary)',
                         fontSize: '0.9rem',
@@ -59,19 +59,19 @@ const Process = () => {
                         <div key={index} className="glass-panel" style={{ position: 'relative', zIndex: 1 }}>
                             <div style={{
                                 background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
-                                width: '60px',
-                                height: '60px',
-                                borderRadius: '50%',
+                                width: '56px',
+                                height: '56px',
+                                borderRadius: '14px',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 marginBottom: '1.5rem',
-                                boxShadow: '0 4px 20px var(--primary-glow)'
+                                boxShadow: '0 4px 12px var(--primary-glow)'
                             }}>
                                 {step.icon}
                             </div>
-                            <h3 style={{ fontSize: '1.4rem', marginBottom: '1rem' }}>{step.title}</h3>
-                            <p style={{ color: 'var(--text-muted)' }}>{step.desc}</p>
+                            <h3 style={{ fontSize: '1.3rem', marginBottom: '1rem' }}>{step.title}</h3>
+                            <p style={{ color: 'var(--text-muted)', lineHeight: 1.7 }}>{step.desc}</p>
                         </div>
                     ))}
                 </div>
